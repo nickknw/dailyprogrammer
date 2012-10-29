@@ -14,7 +14,23 @@ main = do
         argument:_ -> putStrLn $ decToSci argument
 
 decToSci :: String -> String
-decToSci num = num
+decToSci number = formatAsSci (num / (10 ^^ exponent)) exponent
+	where 
+	    num = read number :: Double
+	    exponent = findExponent num
 
 sciToDec :: String -> String
 sciToDec num = num
+
+formatAsSci :: (Num a, Num b) => a -> b -> String
+formatAsSci number exponent = show number ++ " * 10^" ++ show exponent
+
+findExponent :: Double -> Int
+findExponent num = findExponentR num 0
+
+findExponentR :: Double -> Int -> Int
+findExponentR num counter 
+	| num >= 1 && num < 10 = counter
+	| num >= 1 = findExponentR (num / 10) (counter + 1)
+	| num == 0 = 0
+	| num < 1 = findExponentR (num * 10) (counter - 1)
