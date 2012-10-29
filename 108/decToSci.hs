@@ -7,11 +7,10 @@ main = do
     args <- getArgs
     randomNum <- randomRIO (1, 2000000000) :: IO Int
     case args of
-        [] -> putStrLn usage
-        "-g":_ -> putStrLn $ decToSci (show randomNum)
-        "-r":rest 
-            | length rest == 0 -> error usage
-            | otherwise -> putStrLn $ sciToDec $ head rest
+        []         -> putStrLn usage
+        "-g":_     -> putStrLn $ decToSci (show randomNum)
+        "-r":[]    -> error usage
+        "-r":rest  -> putStrLn $ sciToDec $ head rest
         argument:_ -> putStrLn $ decToSci argument
 
 decToSci :: String -> String
