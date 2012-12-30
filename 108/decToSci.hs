@@ -1,5 +1,6 @@
 import System.Environment
 import System.Random
+import Data.List.Split
 
 -- Command line interface 
 
@@ -28,4 +29,9 @@ formatAsSci number exponent = show number ++ " x 10^" ++ show exponent
 -- Sci to Dec
 
 sciToDec :: String -> String
-sciToDec num = num
+sciToDec input = 
+    let numbers = splitOn " x 10^" input 
+    in 
+    case numbers of
+	digits:exponent:[] -> show $ read digits * (10 ^^ read exponent)
+	_ -> error usage
