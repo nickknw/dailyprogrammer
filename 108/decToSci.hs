@@ -19,18 +19,11 @@ main = do
 
 decToSci :: Double -> String
 decToSci number = 
-    let exponent = findExponentR number 0
+    let exponent = floor $ logBase 10 number
     in formatAsSci (number / (10 ^^ exponent)) exponent
 
 formatAsSci :: (Num a, Num b) => a -> b -> String
 formatAsSci number exponent = show number ++ " x 10^" ++ show exponent
-
-findExponentR :: Double -> Int -> Int
-findExponentR num counter 
-	| num >= 1 && num < 10 = counter
-	| num >= 1 = findExponentR (num / 10) (counter + 1)
-	| num == 0 = 0
-	| num < 1 = findExponentR (num * 10) (counter - 1)
 
 -- Sci to Dec
 
