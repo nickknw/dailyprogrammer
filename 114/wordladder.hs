@@ -8,8 +8,20 @@ dictFile = "selected_four-letter_words.txt"
 
 -- Command line interface
 
-usage = "Usage:\n"
-    ++ "./wordladder list puma\n"
+usage = "\nInvalid syntax.\n\nUsage:\n\n"
+
+    ++ "./wordladder list <word>\n"
+    ++ "    - List all the words that can be made from <word> by changing one letter.\n\n"
+
+    ++ "./wordladder most\n"
+    ++ "    - Show the top 10 biggest word ladders.\n\n"
+
+    ++ "./wordladder chain <n> <word>\n"
+    ++ "    - Show the number of words that can be reached, starting from <word>, in <n> or fewer steps.\n\n"
+
+    ++ "Examples:\n\n"
+
+    ++ "./wordladder list best\n"
     ++ "./wordladder most\n"
     ++ "./wordladder chain 3 best\n"
 
@@ -20,7 +32,7 @@ main = do
         "list":word:[] -> putStrLn $ fmtList $ wordLadder word dict
         "most":_ -> putStrLn $ fmtList $ flattenPairs $ mostLadderable dict
         "chain":steps:start:[] -> putStrLn $ show $ length $ wordChain (read steps) (start:[]) dict
-        _ -> error usage
+        _ -> putStrLn usage
 
 fmtList list = foldl1 (\x acc-> x ++ "\n" ++ acc) list
 
