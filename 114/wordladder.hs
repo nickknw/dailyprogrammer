@@ -19,7 +19,7 @@ main = do
     case args of
         "list":word:[] -> putStrLn $ fmtList $ wordLadder word dict
         "most":_ -> putStrLn $ fmtList $ flattenPairs $ mostLadderable dict
-        "chain":steps:start:[] -> putStrLn $ fmtList $ wordChain (read steps) (start:[]) dict
+        "chain":steps:start:[] -> putStrLn $ show $ length $ wordChain (read steps) (start:[]) dict
         _ -> error usage
 
 fmtList list = foldl1 (\x acc-> x ++ "\n" ++ acc) list
@@ -32,15 +32,14 @@ wordLadder :: String -> [String] -> [String]
 wordLadder word dict = filter (oneLetterOff word) dict
 
 oneLetterOff :: String -> String -> Bool
-oneLetterOff word1 word2 = 1 == (sum $ map zeroOutMatches (zip word1 word2))
-    where zeroOutMatches (a, b) = if a == b then 0 else 1
+oneLetterOff word1 word2 = 1 == (length $ filter not $ (zipWith (==) word1 word2))
 
 -- Most Ladderable
 
 mostLadderable dict =
-    let ladderLengths = map (\w -> (w, length (wordLadder w dict))) dict
+    let ladderLengthPairs = map (\w -> (w, length (wordLadder w dict))) dict
     in
-    take 10 $ reverse $ sortBy (comparing snd) ladderLengths
+    take 10 $ reverse $ sortBy (comparing snd) ladderLengthPairs
 
 -- Word Chain
 
