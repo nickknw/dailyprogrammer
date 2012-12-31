@@ -19,7 +19,7 @@ main = do
     case args of
         "list":word:[] -> putStrLn $ fmtList $ wordLadder word dict
         "most":_ -> putStrLn $ fmtList $ flattenPairs $ mostLadderable dict
-        "chain":steps:start:[] -> putStrLn $ wordChain steps start dict
+        "chain":steps:start:[] -> putStrLn $ fmtList $ wordChain (read steps) (start:[]) dict
         _ -> error usage
 
 fmtList list = foldl1 (\x acc-> x ++ "\n" ++ acc) list
@@ -44,4 +44,9 @@ mostLadderable dict =
 
 -- Word Chain
 
-wordChain steps start dict = undefined
+wordChain :: Int -> [String] -> [String] -> [String]
+wordChain 0 current _ = current
+wordChain steps current dict =
+    let nextLevelWords = nub $ concatMap (\x -> wordLadder x dict) current
+    in
+    nub (current ++ wordChain (steps-1) nextLevelWords dict)
