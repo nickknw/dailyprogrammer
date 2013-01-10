@@ -13,8 +13,8 @@ usage = "\nInvalid syntax.\n\nUsage:\n\n"
     ++ "./wordladder list <word>\n"
     ++ "    - List all the words that can be made from <word> by changing one letter.\n\n"
 
-    ++ "./wordladder most\n"
-    ++ "    - Show the top 10 biggest word ladders.\n\n"
+    ++ "./wordladder top <num>\n"
+    ++ "    - Show the top <num> biggest word ladders.\n\n"
 
     ++ "./wordladder chain <n> <word>\n"
     ++ "    - Show the number of words that can be reached, starting from <word>, in <n> or fewer steps.\n\n"
@@ -22,21 +22,21 @@ usage = "\nInvalid syntax.\n\nUsage:\n\n"
     ++ "Examples:\n\n"
 
     ++ "./wordladder list best\n"
-    ++ "./wordladder most\n"
+    ++ "./wordladder top 10\n"
     ++ "./wordladder chain 3 best\n"
 
 main = do
     args <- getArgs
     dict <- lines <$> replace "\r" "" <$> readFile dictFile
     case args of
-        "list":word:[] -> putStrLn $ fmtList $ wordLadder word dict
-        "most":_ -> putStrLn $ fmtList $ flattenPairs $ mostLadderable dict
+        "list":word:[]         -> putStrLn $ fmtList $ wordLadder word dict
+        "top":num:_            -> putStrLn $ fmtList $ fmtPairs $ mostLadderable (read num) dict
         "chain":steps:start:[] -> putStrLn $ show $ length $ wordChain (read steps) (start:[]) dict
-        _ -> putStrLn usage
+        _                      -> putStrLn usage
 
 fmtList list = foldl1 (\x acc-> x ++ "\n" ++ acc) list
 
-flattenPairs list = map (\p -> show (fst p) ++ " - " ++ show (snd p)) list
+fmtPairs pairs = map (\p -> fst p ++ " - " ++ show (snd p)) pairs
 
 -- Word Ladder
 
@@ -48,16 +48,13 @@ oneLetterOff word1 word2 = 1 == (length $ filter not $ (zipWith (==) word1 word2
 
 -- Most Ladderable
 
-mostLadderable dict =
-    let ladderLengthPairs = map (\w -> (w, length (wordLadder w dict))) dict
-    in
-    take 10 $ reverse $ sortBy (comparing snd) ladderLengthPairs
+mostLadderable :: Int -> [String] -> [(String, Int)]
+mostLadderable num dict = take num $ reverse $ sortBy (comparing snd) wordNumberPairs
+    where wordNumberPairs = [(w, length (wordLadder w dict)) | w <- dict]
 
 -- Word Chain
 
 wordChain :: Int -> [String] -> [String] -> [String]
 wordChain 0 current _ = current
-wordChain steps current dict =
-    let nextLevelWords = nub $ concatMap (\x -> wordLadder x dict) current
-    in
-    nub (current ++ wordChain (steps-1) nextLevelWords dict)
+wordChain steps current dict = nub $ current ++ wordChain (steps-1) nextLevelOfWords dict
+    where nextLevelOfWords = nub $ concat [wordLadder x dict | x <- current]
