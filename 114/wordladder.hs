@@ -30,7 +30,7 @@ main = do
     dict <- lines <$> replace "\r" "" <$> readFile dictFile
     case args of
         "list":word:[]         -> putStrLn $ fmtList $ wordLadder word dict
-        "top":num:_            -> putStrLn $ fmtList $ fmtPairs $ mostLadderable (read num) dict
+        "top":num:[]           -> putStrLn $ fmtList $ fmtPairs $ mostLadderable (read num) dict
         "chain":steps:start:[] -> putStrLn $ show $ length $ wordChain (read steps) (start:[]) dict
         _                      -> putStrLn usage
 
