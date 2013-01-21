@@ -1,4 +1,5 @@
 // Java with only platform libraries
+package com.nickknowlson.wordladderjava;
 
 import java.io.*;
 import java.util.*;
@@ -11,20 +12,20 @@ public class WordLadderJava {
 
     public static String usage = "\nInvalid syntax.\n\nUsage:\n\n"
 
-    + "./wordladder list <word>\n"
+    + "java WordLadder list <word>\n"
     + "    - List all the words that can be made from <word> by changing one letter.\n\n"
 
-    + "./wordladder top <num>\n"
+    + "java WordLadder top <num>\n"
     + "    - Show the top <num> biggest word ladders.\n\n"
 
-    + "./wordladder chain <n> <word>\n"
+    + "java WordLadder chain <n> <word>\n"
     + "    - Show the number of words that can be reached, starting from <word>, in <n> or fewer steps.\n\n"
 
     + "Examples:\n\n"
 
-    + "./wordladder list best\n"
-    + "./wordladder top 10\n"
-    + "./wordladder chain 3 best\n";
+    + "java WordLadder list best\n"
+    + "java WordLadder top 10\n"
+    + "java WordLadder chain 3 best\n";
  
 
     public static void main(String[] args) throws FileNotFoundException{
@@ -70,7 +71,7 @@ public class WordLadderJava {
         return result;
     }
 
-    public static String fmtPairs (ArrayList<Pair<String, Integer>> pairs) {
+    public static String fmtPairs (SortedSet<Pair<String, Integer>> pairs) {
         String result = "";
 
         for (Pair<String, Integer> pair : pairs) {
@@ -114,8 +115,34 @@ public class WordLadderJava {
 
     // Most Ladderable
 
-    public static ArrayList<Pair<String, Integer>> mostLadderable (int num, ArrayList<String> dict) {
-        return new ArrayList<Pair<String, Integer>>();
+    public static SortedSet<Pair<String, Integer>> mostLadderable (int num, ArrayList<String> dict) {
+
+        TreeSet<Pair<String, Integer>> wordNumPairs = new TreeSet<Pair<String, Integer>>(
+            new Comparator<Pair<String, Integer>>() {
+                @Override
+                public int compare(Pair<String, Integer> e1, Pair<String, Integer> e2) {
+                    return e1.b.compareTo(e2.b);
+                }
+            });
+
+
+        for (String word : dict) {
+            wordNumPairs.add(new Pair<String, Integer>(word, wordLadder(word, dict).size()));
+        }
+
+        int i = 1;
+        Pair<String, Integer> tenthItem = null;
+        NavigableSet<Pair<String, Integer>> wordNumPairsDescending = wordNumPairs.descendingSet();
+        for (Pair<String, Integer> pair : wordNumPairsDescending) {
+            tenthItem = pair;
+            if (i == num) {
+                break;
+            }
+            i++;
+        }
+
+        return wordNumPairsDescending.headSet(tenthItem);
+
     }
 
     // Word Chain
@@ -123,15 +150,4 @@ public class WordLadderJava {
     public static ArrayList<String> wordChain (int steps, ArrayList<String> current, ArrayList<String> dict) {
         return new ArrayList<String>();
     }
-
-    // Helpers
-
-    public class Pair<A, B> { 
-      public final A a; 
-      public final B b; 
-      public Pair (A a, B b) { 
-        this.a = a; 
-        this.b = b; 
-      } 
-    } 
 }
