@@ -1,5 +1,4 @@
 // Java with only platform libraries
-package com.nickknowlson.wordladderjava;
 
 import java.io.*;
 import java.util.*;
@@ -150,4 +149,13 @@ public class WordLadderJava {
     public static ArrayList<String> wordChain (int steps, ArrayList<String> current, ArrayList<String> dict) {
         return new ArrayList<String>();
     }
+
+    public static class Pair<A, B> { 
+        public final A a; 
+        public final B b; 
+        public Pair (A a, B b) { 
+            this.a = a; 
+            this.b = b; 
+        } 
+    } 
 }
