@@ -5,11 +5,11 @@ import java.util.*;
 
 public class WordLadderJava {
 
-    public static String dictFile = "selected_four-letter_words.txt";
+    public static final String dictFile = "selected_four-letter_words.txt";
 
     // Command Line Interface
 
-    public static String usage = "\nInvalid syntax.\n\nUsage:\n\n"
+    public static final String usage = "\nInvalid syntax.\n\nUsage:\n\n"
 
     + "java WordLadder list <word>\n"
     + "    - List all the words that can be made from <word> by changing one letter.\n\n"
@@ -27,7 +27,7 @@ public class WordLadderJava {
     + "java WordLadder chain 3 best\n";
  
 
-    public static void main(String[] args) throws FileNotFoundException{
+    public static void main(final String[] args) throws FileNotFoundException{
         if(args.length == 0) {
             System.out.println(usage);
             return;
@@ -49,9 +49,9 @@ public class WordLadderJava {
         }
         else if (args[0].equals("chain") && args.length == 3) {
             int steps = Integer.parseInt(args[1]);
-            ArrayList<String> start = new ArrayList<String>();
+            List<String> start = new ArrayList<String>();
             start.add(args[2]);
-            ArrayList<String> chain = wordChain(steps, start, dict);
+            Set<String> chain = wordChain(steps, start, dict);
             System.out.println(chain.size());
         }
         else {
@@ -60,7 +60,7 @@ public class WordLadderJava {
         }
     }
 
-    public static <T> String fmtList (ArrayList<T> list) {
+    public static <T> String fmtList (final List<T> list) {
         String result = "";
 
         for (T item : list) {
@@ -70,7 +70,7 @@ public class WordLadderJava {
         return result;
     }
 
-    public static String fmtPairs (SortedSet<Pair<String, Integer>> pairs) {
+    public static String fmtPairs (final SortedSet<Pair<String, Integer>> pairs) {
         String result = "";
 
         for (Pair<String, Integer> pair : pairs) {
@@ -82,9 +82,9 @@ public class WordLadderJava {
 
     // Word Ladder
 
-    public static ArrayList<String> wordLadder (String word, ArrayList<String> dict) {
+    public static List<String> wordLadder (final String word, final List<String> dict) {
 
-        ArrayList<String> wordLadderWords = new ArrayList<String>();
+        List<String> wordLadderWords = new ArrayList<String>();
 
         for (String dictWord : dict) {
             if (oneLetterOff(word, dictWord)) {
@@ -95,7 +95,7 @@ public class WordLadderJava {
         return wordLadderWords;
     }
 
-    public static Boolean oneLetterOff (String word1, String word2) {
+    public static Boolean oneLetterOff (final String word1, final String word2) {
 
         if (word1 == null || word2 == null || word1.length() != word2.length()) {
             return false;
@@ -114,7 +114,7 @@ public class WordLadderJava {
 
     // Most Ladderable
 
-    public static SortedSet<Pair<String, Integer>> mostLadderable (int num, ArrayList<String> dict) {
+    public static SortedSet<Pair<String, Integer>> mostLadderable (final int num, final ArrayList<String> dict) {
 
         TreeSet<Pair<String, Integer>> wordNumPairs = new TreeSet<Pair<String, Integer>>(
             new Comparator<Pair<String, Integer>>() {
@@ -146,10 +146,32 @@ public class WordLadderJava {
 
     // Word Chain
 
-    public static ArrayList<String> wordChain (int steps, ArrayList<String> current, ArrayList<String> dict) {
-        return new ArrayList<String>();
+    public static Set<String> wordChain (final int steps, final List<String> current, final List<String> dict) {
+        Set<String> finalSet = new TreeSet<String>();
+
+        finalSet.addAll(current);
+        Set<String> next = nextLevelOfWords(new TreeSet<String>(current), dict);
+
+        for (int i = 0; i < steps; i++) {
+            finalSet.addAll(next);
+            next = nextLevelOfWords(next, dict);
+        }
+
+        return finalSet;
     }
 
+    private static Set<String> nextLevelOfWords(final Set<String> current, final List<String> dict) {
+        Set<String> next = new TreeSet<String>();
+        for (String word : current) {
+            next.addAll(wordLadder(word, dict));
+        }
+
+        return next;
+    }
+        
+    // Helpers
+	
+    // http://stackoverflow.com/a/2671052/224354
     public static class Pair<A, B> { 
         public final A a; 
         public final B b; 
