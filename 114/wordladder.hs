@@ -35,7 +35,7 @@ main = do
         _                      -> putStrLn usage
 
 fmtList :: [String] -> String
-fmtList list = concatMap (\x -> x ++ "\n") list
+fmtList list = join "\n" list
 
 fmtPairs :: [(String, Int)] -> String
 fmtPairs pairs = concatMap (\p -> fst p ++ " - " ++ show (snd p) ++ "\n") pairs
