@@ -4,7 +4,7 @@ import Data.String.Utils
 import Data.Ord
 import Data.List
 
-dictFile = "selected_four-letter_words.txt"
+dictFile = "../selected_four-letter_words.txt"
 
 -- Command line interface
 

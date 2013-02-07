@@ -8,7 +8,7 @@ import java.util.*;
 
 public class WordLadderJava {
 
-    public static final String dictFile = "selected_four-letter_words.txt";
+    public static final String dictFile = "../selected_four-letter_words.txt";
 
     // Command Line Interface
 
@@ -132,18 +132,18 @@ public class WordLadderJava {
             wordNumPairs.add(new Pair<String, Integer>(word, wordLadder(word, dict).size()));
         }
 
-        int i = 1;
-        Pair<String, Integer> tenthItem = null;
+        int i = 0;
+        Pair<String, Integer> nthItem = null;
         NavigableSet<Pair<String, Integer>> wordNumPairsDescending = wordNumPairs.descendingSet();
         for (Pair<String, Integer> pair : wordNumPairsDescending) {
-            tenthItem = pair;
+            nthItem = pair;
             if (i == num) {
                 break;
             }
             i++;
         }
 
-        return wordNumPairsDescending.headSet(tenthItem);
+        return wordNumPairsDescending.headSet(nthItem);
 
     }
 
