@@ -1,4 +1,4 @@
-(defproject wordladder "0.1.0-SNAPSHOT"
+(defproject wordladder "1.0"
   :description "simple exercise"
   :url "https://github.com/nickknw/dailyprogrammer/tree/master/114"
   :license {:name "MIT License"
