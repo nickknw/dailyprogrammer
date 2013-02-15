@@ -10,79 +10,6 @@ public class WordLadderJava {
 
     public static final String dictFile = "../selected_four-letter_words.txt";
 
-    // Command Line Interface
-
-    public static final String usage = "\nInvalid syntax.\n\nUsage:\n\n"
-
-    + "java WordLadder list <word>\n"
-    + "    - List all the words that can be made from <word> by changing one letter.\n\n"
-
-    + "java WordLadder top <num>\n"
-    + "    - Show the top <num> biggest word ladders.\n\n"
-
-    + "java WordLadder chain <n> <word>\n"
-    + "    - Show the number of words that can be reached, starting from <word>, in <n> or fewer steps.\n\n"
-
-    + "Examples:\n\n"
-
-    + "java WordLadder list best\n"
-    + "java WordLadder top 10\n"
-    + "java WordLadder chain 3 best\n";
- 
-
-    public static void main(final String[] args) throws FileNotFoundException{
-        if(args.length == 0) {
-            System.out.println(usage);
-            return;
-        }
-
-        Scanner sc = new Scanner(new File(dictFile));
-        ArrayList<String> dict = new ArrayList<String>();
-        while (sc.hasNext()) {
-            dict.add(sc.next());
-        }
-        
-        if (args[0].equals("list") && args.length == 2) {
-            String word = args[1];
-            System.out.println(fmtList(wordLadder(word, dict)));
-        } 
-        else if (args[0].equals("top") && args.length == 2) {
-            int num = Integer.parseInt(args[1]);
-            System.out.println(fmtPairs(mostLadderable(num, dict)));
-        }
-        else if (args[0].equals("chain") && args.length == 3) {
-            int steps = Integer.parseInt(args[1]);
-            List<String> start = new ArrayList<String>();
-            start.add(args[2]);
-            Set<String> chain = wordChain(steps, start, dict);
-            System.out.println(chain.size());
-        }
-        else {
-            System.out.println(usage);
-            return;
-        }
-    }
-
-    public static <T> String fmtList (final List<T> list) {
-        String result = "";
-
-        for (T item : list) {
-            result += item.toString() + "\n";
-        }
-
-        return result;
-    }
-
-    public static String fmtPairs (final SortedSet<Pair<String, Integer>> pairs) {
-        String result = "";
-
-        for (Pair<String, Integer> pair : pairs) {
-            result += pair.a + " - " + pair.b + "\n";
-        }
-
-        return result;
-    }
-
     // Word Ladder
 
     public static List<String> wordLadder (final String word, final List<String> dict) {
@@ -170,6 +97,78 @@ public class WordLadderJava {
         }
 
         return next;
+    }
+
+    // Command Line Interface
+
+    public static final String usage = "\nInvalid syntax.\n\nUsage:\n\n"
+
+    + "java WordLadder list <word>\n"
+    + "    - List all the words that can be made from <word> by changing one letter.\n\n"
+
+    + "java WordLadder top <num>\n"
+    + "    - Show the top <num> biggest word ladders.\n\n"
+
+    + "java WordLadder chain <n> <word>\n"
+    + "    - Show the number of words that can be reached, starting from <word>, in <n> or fewer steps.\n\n"
+
+    + "Examples:\n\n"
+
+    + "java WordLadder list best\n"
+    + "java WordLadder top 10\n"
+    + "java WordLadder chain 3 best\n";
+ 
+    public static <T> String fmtList (final List<T> list) {
+        String result = "";
+
+        for (T item : list) {
+            result += item.toString() + "\n";
+        }
+
+        return result;
+    }
+
+    public static String fmtPairs (final SortedSet<Pair<String, Integer>> pairs) {
+        String result = "";
+
+        for (Pair<String, Integer> pair : pairs) {
+            result += pair.a + " - " + pair.b + "\n";
+        }
+
+        return result;
+    }
+
+    public static void main(final String[] args) throws FileNotFoundException{
+        if(args.length == 0) {
+            System.out.println(usage);
+            return;
+        }
+
+        Scanner sc = new Scanner(new File(dictFile));
+        ArrayList<String> dict = new ArrayList<String>();
+        while (sc.hasNext()) {
+            dict.add(sc.next());
+        }
+        
+        if (args[0].equals("list") && args.length == 2) {
+            String word = args[1];
+            System.out.println(fmtList(wordLadder(word, dict)));
+        } 
+        else if (args[0].equals("top") && args.length == 2) {
+            int num = Integer.parseInt(args[1]);
+            System.out.println(fmtPairs(mostLadderable(num, dict)));
+        }
+        else if (args[0].equals("chain") && args.length == 3) {
+            int steps = Integer.parseInt(args[1]);
+            List<String> start = new ArrayList<String>();
+            start.add(args[2]);
+            Set<String> chain = wordChain(steps, start, dict);
+            System.out.println(chain.size());
+        }
+        else {
+            System.out.println(usage);
+            return;
+        }
     }
         
     // Helpers

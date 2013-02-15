@@ -1,13 +1,16 @@
-# wordladder
+Clojure code is in src/wordladder/core.clj
 
-A Clojure library designed to ... well, that part is up to you.
+Compile:
 
-## Usage
+    cd dailyprogrammer/114/clojure/
+    lein uberjar
 
-FIXME
+Run:
 
-## License
+    java -jar wordladder.jar list word
+    java -jar wordladder.jar top 10
+    java -jar wordladder.jar chain 3 word
 
-Copyright © 2013 FIXME
+Answers:
 
-Distributed under the Eclipse Public License, the same as Clojure.
+    ./answers.sh
