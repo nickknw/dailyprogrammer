@@ -40,7 +40,26 @@ object WordLadder {
 
     // Command line interface
 
-    val usage = "usage info"
+    val usage = """
+Invalid syntax.
+
+Usage:
+
+scala WordLadder list <word>
+    - List all the words that can be made from <word> by changing one letter.
+
+scala WordLadder top <num>
+    - Show the top <num> biggest word ladders.
+
+scala WordLadder chain <n> <word>
+    - Show the number of words that can be reached, starting from <word>, in <n> or fewer steps.
+
+Examples:
+
+scala WordLadder list best
+scala WordLadder top 10
+scala WordLadder chain 3 best
+"""
 
     def fmtList(list: Seq[String]): String = list.mkString("\n")
 
