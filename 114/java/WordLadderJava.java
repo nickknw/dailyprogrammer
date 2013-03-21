@@ -1,6 +1,6 @@
 // Java without 3rd party libraries libraries
 // I was planning on doing a version with lambdaj and any other libraries that
-// might help, but I got partway throught and it was such a small improvement that
+// might help, but I got partway through and it was such a small improvement that
 // it didn't seem worth it for such a small program.
 
 import java.io.*;
@@ -77,10 +77,8 @@ public class WordLadderJava {
     // Word Chain
 
     public static Set<String> wordChain (final int steps, final List<String> current, final List<String> dict) {
-        Set<String> finalSet = new TreeSet<String>();
-
-        finalSet.addAll(current);
-        Set<String> next = nextLevelOfWords(new TreeSet<String>(current), dict);
+        Set<String> finalSet = new TreeSet<String>(current);
+        Set<String> next = nextLevelOfWords(finalSet, dict);
 
         for (int i = 0; i < steps; i++) {
             finalSet.addAll(next);
